@@ -24,6 +24,7 @@ function Header() {
     //  get user_id
     useEffect(() => {
         async function fetchProtected() {
+            setIsLoading(true);
             try {
                 const response = await axios.get(`${backendUrl}/protected`, {
                     headers: {
@@ -32,10 +33,12 @@ function Header() {
                 });
 
                 if (response.status === 200) {
+                    setIsLoading(false);
                     setUserId(response.data.user.id);
                 }
 
             } catch (error) {
+                setIsLoading(false);
                 console.log("Error: ", error);
                 if (error.response && error.response.status === 401) {
                     console.log(error.response.data);

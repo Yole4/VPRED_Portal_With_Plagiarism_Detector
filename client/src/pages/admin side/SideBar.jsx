@@ -38,7 +38,7 @@ function SideBar() {
                             }
                         });
                         if (response.status === 200) {
-
+                            setIsLoading(false);
                             setUserData(response.data.results[0]);
                         }
                     } catch (error) {
