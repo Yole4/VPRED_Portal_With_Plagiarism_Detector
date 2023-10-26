@@ -15,4 +15,4 @@ export default BackEndUrl
 // DB_DATABASE=b9xczzfhpeipjphb5qks
 // SECRET_KEY=7044bb999e1788e1a373de730d5295488402e301e2fc0f790f3602297b9143fe,
 // DB_PORT=3306
-// FE_LINK=https://vpred-portal-with-plagiarism-detector.onrender.com
+// FE_LINK=https://vpred.onrender.com

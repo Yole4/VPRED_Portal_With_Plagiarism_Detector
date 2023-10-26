@@ -34,6 +34,7 @@ function AllResearchAndExtension() {
     // check the user
     useEffect(() => {
         async function fetchProtected() {
+            setIsLoading(true);
             try {
                 const response = await axios.get(`${backendUrl}/protected`, {
                     headers: {
@@ -59,6 +60,7 @@ function AllResearchAndExtension() {
                                 setMainUserId(response.data.results[0].id);
                                 setUserRank(response.data.results[0].rank);
                                 const check = response.data.results[0].rank;
+                                setIsLoading(false);
 
                                 // go to author side
                                 if (check === "Author") {
@@ -135,6 +137,7 @@ function AllResearchAndExtension() {
                             }
                         })
                     } catch (error) {
+                        setIsLoading(false);
                         console.log("Error: ", error);
                         if (error.response && error.response.status === 401) {
                             console.log(error.response.data);
@@ -143,6 +146,7 @@ function AllResearchAndExtension() {
                 }
 
             } catch (error) {
+                setIsLoading(false);
                 console.log("Error: ", error);
                 if (error.response && error.response.status === 401) {
                     console.log(error.response.data);
@@ -568,10 +572,10 @@ function AllResearchAndExtension() {
     // ###############################################################  FETCH ALL RESEARCH AND EXTENSION SIDE   ###################################################################################
     const [listOfRorE, setListUnitHead] = useState([]);
     const [searchList, setSearchList] = useState('');
-    const [testingLoading, setTestingLoading] = useState(true);
 
     useEffect(() => {
         const fetchAllRorE = async () => {
+            setIsLoading(true);
             try {
                 const response = await axios.get(`${backendUrl}/fetch/all-RorE`, {
                     headers: {
@@ -580,10 +584,10 @@ function AllResearchAndExtension() {
                 });
                 if (response.status === 200) {
                     setListUnitHead(response.data.results);
-                    setTestingLoading(false);
+                    setIsLoading(false);
                 }
             } catch (error) {
-                setTestingLoading(false);
+                setIsLoading(false);
                 if (error.response && error.response.status === 401) {
                     console.log(error.response.data.message);
                 }

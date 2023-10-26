@@ -18,6 +18,7 @@ function AddUnitHeadAccount() {
     const [mainUserId, setMainUserId] = useState('');
     // main user id
     const user_id = mainUserId.toString();
+    const [isLoading, setIsLoading] = useState(false);
 
     // initialize variable to identity when to reload
     const [reloadTester, setReloadTest] = useState(true);
@@ -25,6 +26,7 @@ function AddUnitHeadAccount() {
     // check the user
     useEffect(() => {
         async function fetchProtected() {
+            setIsLoading(true);
             try {
                 const response = await axios.get(`${backendUrl}/protected`, {
                     headers: {
@@ -49,6 +51,7 @@ function AddUnitHeadAccount() {
                                 setUserData(response.data.results[0]);
                                 setMainUserId(response.data.results[0].id);
                                 const check = response.data.results[0].rank;
+                                setIsLoading(false);
 
                                 // go to author side
                                 if (check === "Author") {
@@ -125,6 +128,7 @@ function AddUnitHeadAccount() {
                             }
                         })
                     } catch (error) {
+                        setIsLoading(false);
                         console.log("Error: ", error);
                         if (error.response && error.response.status === 401) {
                             console.log(error.response.data);
@@ -133,6 +137,7 @@ function AddUnitHeadAccount() {
                 }
 
             } catch (error) {
+                setIsLoading(false);
                 console.log("Error: ", error);
                 if (error.response && error.response.status === 401) {
                     console.log(error.response.data);
@@ -158,7 +163,6 @@ function AddUnitHeadAccount() {
     const [email, setEmail] = useState('');
 
     // display error or success
-    const [isLoading, setIsLoading] = useState(false);
     const [isResponse, setIsResponse] = useState(false);
     const [success, setSuccess] = useState(false);
     const [responseMessage, setResponseMessage] = useState('');
@@ -331,10 +335,10 @@ function AddUnitHeadAccount() {
     // ###############################################################  REQUEST TO GET ALL UNIT HEAD ACCOUNT  ############################################################################################
     const [listUnitHead, setListUnitHead] = useState([]);
     const [searchList, setSearchList] = useState('');
-    const [testingLoading, setTestingLoading] = useState(true);
 
     useEffect(() => {
         const fetchUHAccount = async () => {
+            setIsLoading(true);
             try {
                 const response = await axios.get(`${backendUrl}/fetch/all-unit-head`, {
                     headers: {
@@ -343,10 +347,10 @@ function AddUnitHeadAccount() {
                 });
                 if (response.status === 200) {
                     setListUnitHead(response.data.results);
-                    setTestingLoading(false);
+                    setIsLoading(false);
                 }
             } catch (error) {
-                setTestingLoading(false);
+                setIsLoading(false);
                 if (error.response && error.response.status === 401) {
                     console.log(error.response.data.message);
                 }

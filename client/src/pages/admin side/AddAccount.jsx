@@ -19,12 +19,15 @@ function AddAccount() {
     const [userRank, setUserRank] = useState('');
     // convert to string
     const user_id = mainUserId.toString();
+    // set loading side
+    const [isLoading, setIsLoading] = useState(false);
 
     // initialize variable to identity when to reload
     const [reloadTester, setReloadTest] = useState(true);
 
     useEffect(() => {
         async function fetchProtected() {
+            setIsLoading(true);
             try {
                 const response = await axios.get(`${backendUrl}/protected`, {
                     headers: {
@@ -46,6 +49,7 @@ function AddAccount() {
                         }).then((response) => {
                             if (response.status === 200) {
                                 // set data on state
+                                setIsLoading(false);
                                 setUserData(response.data.results[0]);
                                 setMainUserId(response.data.results[0].id);
                                 setUserRank(response.data.results[0].rank);
@@ -126,6 +130,7 @@ function AddAccount() {
                             }
                         })
                     } catch (error) {
+                        setIsLoading(false);
                         console.log("Error: ", error);
                         if (error.response && error.response.status === 401) {
                             console.log(error.response.data);
@@ -134,6 +139,7 @@ function AddAccount() {
                 }
 
             } catch (error) {
+                setIsLoading(false);
                 console.log("Error: ", error);
                 if (error.response && error.response.status === 401) {
                     console.log(error.response.data);
@@ -162,8 +168,6 @@ function AddAccount() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    // set loading side
-    const [isLoading, setIsLoading] = useState(false);
     // see password/none
     const [fafaEye, setFaFaEye] = useState(false);
 
@@ -349,10 +353,10 @@ function AddAccount() {
     // ###############################################################  REQUEST TO GET ALL CHAIRPERSON ACCOUNT  ############################################################################################
     const [listChairperson, setListChairperson] = useState([]);
     const [searchList, setSearchList] = useState('');
-    const [testingLoading, setTestingLoading] = useState(true);
 
     useEffect(() => {
         const fetchUHAccount = async () => {
+            setIsLoading(true);
             try {
                 const response = await axios.get(`${backendUrl}/fetch/all-chairperson`, {
                     headers: {
@@ -361,10 +365,10 @@ function AddAccount() {
                 });
                 if (response.status === 200) {
                     setListChairperson(response.data.results);
-                    setTestingLoading(false);
+                    setIsLoading(false);
                 }
             } catch (error) {
-                setTestingLoading(false);
+                setIsLoading(false);
                 if (error.response && error.response.status === 401) {
                     console.log(error.response.data.message);
                 }

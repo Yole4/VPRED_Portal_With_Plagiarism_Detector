@@ -18,9 +18,11 @@ function AuthorAccount() {
 
     // initialize variable to identity when to reload
     const [reloadTester, setReloadTest] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         async function fetchProtected() {
+            setIsLoading(true);
             try {
                 const response = await axios.get(`${backendUrl}/protected`, {
                     headers: {
@@ -45,6 +47,7 @@ function AuthorAccount() {
                                 setUserData(response.data.results[0]);
                                 setUserRank(response.data.results[0].rank)
                                 const check = response.data.results[0].rank;
+                                setIsLoading(false);
 
                                 // go to author side
                                 if (check === "Author") {
@@ -121,6 +124,7 @@ function AuthorAccount() {
                             }
                         })
                     } catch (error) {
+                        setIsLoading(false);
                         console.log("Error: ", error);
                         if (error.response && error.response.status === 401) {
                             console.log(error.response.data);
@@ -129,6 +133,7 @@ function AuthorAccount() {
                 }
 
             } catch (error) {
+                setIsLoading(false);
                 console.log("Error: ", error);
                 if (error.response && error.response.status === 401) {
                     console.log(error.response.data);
@@ -153,7 +158,6 @@ function AuthorAccount() {
     const [updateEmail, setUpdateEmail] = useState('');
 
     const [updateId, setUpdateId] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
 
     // for response display
     const [isUpdateResponse, setIsUpdateResponse] = useState(false);
@@ -270,9 +274,9 @@ function AuthorAccount() {
     // ###############################################################  REQUEST TO GET ALL AUTHOR ACCOUNT  ############################################################################################
     const [listAuthor, setListAuthor] = useState([]);
     const [searchList, setSearchList] = useState('');
-    const [testingLoading, setTestingLoading] = useState(true);
 
     useEffect(() => {
+        setIsLoading(true);
         const fetchAllAuthorAccount = async () => {
             try {
                 const response = await axios.get(`${backendUrl}/fetch/all-author`, {
@@ -282,10 +286,10 @@ function AuthorAccount() {
                 });
                 if (response.status === 200) {
                     setListAuthor(response.data.results);
-                    setTestingLoading(false);
+                    setIsLoading(false);
                 }
             } catch (error) {
-                setTestingLoading(false);
+                setIsLoading(false);
                 if (error.response && error.response.status === 401) {
                     console.log(error.response.data.message);
                 }

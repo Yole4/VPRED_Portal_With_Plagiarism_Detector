@@ -15,8 +15,11 @@ function PublicResearchOrExtension() {
   const token = localStorage.getItem('token');
   const [userData, setUserData] = useState('');
 
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     async function fetchProtected() {
+      setIsLoading(true);
       try {
         const response = await axios.get(`${backendUrl}/protected`, {
           headers: {
@@ -41,6 +44,7 @@ function PublicResearchOrExtension() {
                 setUserData(response.data.results[0]);
 
                 const check = response.data.results[0].rank;
+                setIsLoading(false);
 
                 // go to author side
                 if (check === "Author") {
@@ -117,6 +121,7 @@ function PublicResearchOrExtension() {
               }
             })
           } catch (error) {
+            setIsLoading(false);
             console.log("Error: ", error);
             if (error.response && error.response.status === 401) {
               console.log(error.response.data);
@@ -125,6 +130,7 @@ function PublicResearchOrExtension() {
         }
 
       } catch (error) {
+        setIsLoading(false);
         console.log("Error: ", error);
         if (error.response && error.response.status === 401) {
           console.log(error.response.data);
@@ -144,7 +150,6 @@ function PublicResearchOrExtension() {
   // #################################################################################  GET ALL PUBLICIZE RESEARCH OR EXTENSION   ############################################################################
   const [publicData, setPublicData] = useState([]);
   const [searchList, setSearchList] = useState('');
-  const [testingLoading, setTestingLoading] = useState(true);
 
   useEffect(() => {
     const fetchPublicData = async () => {
@@ -156,10 +161,10 @@ function PublicResearchOrExtension() {
         });
         if (response.status === 200) {
           setPublicData(response.data.results);
-          setTestingLoading(false);
+          setIsLoading(false);
         }
       } catch (error) {
-        setTestingLoading(false);
+        setIsLoading(false);
         if (error.response && error.response.status === 401) {
           setPublicData(error.response.data.message.results);
         } else {
@@ -310,7 +315,7 @@ function PublicResearchOrExtension() {
 
       </div>
       {/* fetching data screen */}
-      {testingLoading && (
+      {isLoading && (
         <div className="popup">
           <div className="modal-pop-up-loading">
             <div className="modal-pop-up-loading-spiner"></div>
