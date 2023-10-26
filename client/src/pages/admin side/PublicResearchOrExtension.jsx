@@ -310,7 +310,7 @@ function PublicResearchOrExtension() {
 
       </div>
       {/* fetching data screen */}
-      {isLoading && (
+      {testingLoading && (
         <div className="popup">
           <div className="modal-pop-up-loading">
             <div className="modal-pop-up-loading-spiner"></div>
