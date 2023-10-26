@@ -15,9 +15,11 @@ function Home() {
     // check if the user is already login or not
     const token = localStorage.getItem('token');
     const [userData, setUserData] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         async function fetchProtected() {
+            setIsLoading(true);
             try {
                 const response = await axios.get(`${backendUrl}/protected`, {
                     headers: {
@@ -32,7 +34,7 @@ function Home() {
 
                     try {
                         // fetch data
-                        await axios.get(`${backendUrl}/api/getData/${userId}`,{
+                        await axios.get(`${backendUrl}/api/getData/${userId}`, {
                             headers: {
                                 'Authorization': `Bearer ${token}`
                             }
@@ -42,6 +44,7 @@ function Home() {
                                 setUserData(response.data.results[0]);
 
                                 const check = response.data.results[0].rank;
+                                setIsLoading(false);
 
                                 // go to author side
                                 if (check === "Author") {
@@ -118,14 +121,16 @@ function Home() {
                             }
                         })
                     } catch (error) {
+                        setIsLoading(false);
                         console.log("Error: ", error);
-                        if (error.response && error.response.status === 401){
+                        if (error.response && error.response.status === 401) {
                             console.log(error.response.data);
                         }
                     }
                 }
 
             } catch (error) {
+                setIsLoading(false);
                 console.log("Error: ", error);
                 if (error.response && error.response.status === 401) {
                     console.log(error.response.data);
@@ -159,6 +164,15 @@ function Home() {
                     </div>
                 </div>
             </div>
+            {/* fetching data screen */}
+            {isLoading && (
+                <div className="popup">
+                    <div className="modal-pop-up-loading">
+                        <div className="modal-pop-up-loading-spiner"></div>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

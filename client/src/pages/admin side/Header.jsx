@@ -19,6 +19,7 @@ function Header() {
 
     // get token
     const token = localStorage.getItem('token');
+    const [isLoading, setIsLoading] = useState(false);
 
     //  get user_id
     useEffect(() => {
@@ -61,6 +62,7 @@ function Header() {
 
     useEffect(() => {
         async function not() {
+            setIsLoading(true);
             try {
                 const response = await axios.get(`${backendUrl}/all/notification/${user_id}`, {
                     headers: {
@@ -68,9 +70,11 @@ function Header() {
                     }
                 });
                 if (response.status === 200) {
+                    setIsLoading(false);
                     setNotification(response.data.results);
                 }
             } catch (error) {
+                setIsLoading(false);
                 if (error.response.status === 401) {
                     console.log(error.response.data.message);
                 } else {
@@ -92,10 +96,11 @@ function Header() {
     const [isResponse, setIsResponse] = useState(false);
     const [success, setSuccess] = useState(false);
     const [responseMessage, setResponseMessage] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
 
     const editProfile = async (e) => {
         e.preventDefault();
+
+        setIsLoading(true);
 
         const reqestEdit = new FormData();
         reqestEdit.append('image', image);
@@ -131,7 +136,6 @@ function Header() {
             if (error.response && error.response.status === 401) {
                 setResponseMessage(error.response.data.message);
                 setSuccess(false);
-                setIsLoading(true);
 
                 setTimeout(() => {
                     setResponseMessage(false);
@@ -149,6 +153,7 @@ function Header() {
 
     const changePassword = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
 
         const requestToChangePass = { currentPassword, newPassword, confirmPassword, user_id };
 
@@ -175,7 +180,6 @@ function Header() {
             if (error.response && error.response.status === 401) {
                 setResponseMessage(error.response.data.message);
                 setSuccess(false);
-                setIsLoading(true);
 
                 setTimeout(() => {
                     setResponseMessage(false);
@@ -189,6 +193,7 @@ function Header() {
     // get user data
     useEffect(() => {
         async function getUserData() {
+            setIsLoading(true);
             try {
                 await axios.get(`${backendUrl}/api/getData/${user_id}`, {
                     headers: {
@@ -202,9 +207,11 @@ function Header() {
                         setUserData(response.data.results[0]);
                         setFullName(response.data.results[0].fullname);
                         setOldImage(response.data.results[0].image);
+                        setIsLoading(false);
                     }
                 })
             } catch (error) {
+                setIsLoading(false);
                 console.log("Error: ", error);
                 if (error.response && error.response.status === 401) {
                     console.log(error.response.data);
@@ -469,6 +476,15 @@ function Header() {
                     </div>
                 </div>
             </div>
+            {/* fetching data screen */}
+            {isLoading && (
+                <div className="popup">
+                    <div className="modal-pop-up-loading">
+                        <div className="modal-pop-up-loading-spiner"></div>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

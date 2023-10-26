@@ -13,11 +13,13 @@ function SideBar() {
 
     // get token from the localStorage
     const [userData, setUserData] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const token = localStorage.getItem('token');
 
     useEffect(() => {
         async function fetchProtected() {
+            setIsLoading(true);
             try {
                 const response = await axios.get(`${backendUrl}/protected`, {
                     headers: {
@@ -40,6 +42,7 @@ function SideBar() {
                             setUserData(response.data.results[0]);
                         }
                     } catch (error) {
+                        setIsLoading(false);
                         console.log("Error: ", error);
                         if (error.response && error.response.status === 401) {
                             console.log(error.response.data);
@@ -48,6 +51,7 @@ function SideBar() {
                 }
 
             } catch (error) {
+                setIsLoading(false);
                 console.log("Error: ", error);
                 if (error.response && error.response.status === 401) {
                     console.log(error.response.data);
@@ -130,6 +134,16 @@ function SideBar() {
                     {/* /.sidebar-menu */}
                 </div>
             </aside>
+
+            {/* fetching data screen */}
+            {isLoading && (
+                <div className="popup">
+                    <div className="modal-pop-up-loading">
+                        <div className="modal-pop-up-loading-spiner"></div>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
