@@ -153,6 +153,7 @@ function PublicResearchOrExtension() {
 
   useEffect(() => {
     const fetchPublicData = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get(`${backendUrl}/fetch/public-data`, {
           headers: {

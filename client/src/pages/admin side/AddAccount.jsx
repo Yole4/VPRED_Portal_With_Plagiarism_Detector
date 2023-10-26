@@ -49,11 +49,11 @@ function AddAccount() {
                         }).then((response) => {
                             if (response.status === 200) {
                                 // set data on state
-                                setIsLoading(false);
                                 setUserData(response.data.results[0]);
                                 setMainUserId(response.data.results[0].id);
                                 setUserRank(response.data.results[0].rank);
                                 const check = response.data.results[0].rank;
+                                setIsLoading(false);
 
                                 // go to author side
                                 if (check === "Author") {
