@@ -27,16 +27,19 @@
 }
 
 .modal-pop-up-loading {
-  position: absolute;
+  position: fixed;
   transform: translate(-50%, -50%);
   top: 50%;
   left: 50%;
   width: 100px;
   height: 100px;
-  background-color: rgba(103, 80, 80, 0.5);
+  background-color: #ebe4e4;
+  border-radius: 7px;
   justify-content: center;
   align-items: center;
   text-align: center;
+  z-index: 99999;
+  box-shadow: 1px 1px 20px -1px rgb(150, 149, 149);
 }
 
 .modal-pop-up-loading-spiner {
@@ -48,16 +51,15 @@
   width: 40px;
   height: 40px;
   animation: spin 1s linear infinite;
-
 }
 
 @keyframes spin {
   0% {
-    transform: rotate(0deg);
+      transform: rotate(0deg);
   }
 
   100% {
-    transform: rotate(360deg);
+      transform: rotate(360deg);
   }
 }
 
