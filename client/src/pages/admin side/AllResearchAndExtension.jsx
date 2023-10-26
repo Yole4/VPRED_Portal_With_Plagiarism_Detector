@@ -638,7 +638,7 @@ function AllResearchAndExtension() {
     if (downloadChecker) {
         const fileName = myFileName.split('_+_').pop();
         const file = fileName.split('.')[0];
-        
+
         const a = document.createElement('a');
         a.href = fileUrl;
         a.download = file;
@@ -1123,7 +1123,7 @@ function AllResearchAndExtension() {
                                                                 {/* Check either document is scan or not */}
 
                                                                 <li><a href="#" className="dropdown-item" onClick={() => scanDocument(item)} >{item.isScan === "not" ? 'Scan Document' : 'Scan Document Again'}</a></li>
-                                                                <li><a href="#" className="dropdown-item" style={{display: item.group_code === "" ? 'none' : 'block'}} onClick={() => downloadResult(item)}>Download Plagiarism Result</a></li>
+                                                                <li><a href="#" className="dropdown-item" style={{ display: item.group_code === "" ? 'none' : 'block' }} onClick={() => downloadResult(item)}>Download Plagiarism Result</a></li>
                                                                 <li><a href="#" className="dropdown-item" onClick={() => downloadDocument(item)}>Download Document</a></li>
                                                                 <li>
                                                                     <button data-toggle="modal" data-target="#history" className='dropdown-item'>History</button>
@@ -1194,10 +1194,14 @@ function AllResearchAndExtension() {
             </div >
 
             {/* fetching data screen */}
-            <div class="modal-pop-up-loading" style={{ display: testingLoading ? 'block' : 'none' }}>
-                <div class="modal-pop-up-loading-spiner"></div>
-                <p>fetching data...</p>
-            </div>
+            {isLoading && (
+                <div className="popup">
+                    <div className="modal-pop-up-loading">
+                        <div className="modal-pop-up-loading-spiner"></div>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            )}
 
             {/* Loading for plagiarism */}
             < div class="modal-pop-up-loading" style={{ display: scanLoading ? 'block' : 'none' }}>

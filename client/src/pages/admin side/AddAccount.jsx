@@ -778,10 +778,14 @@ function AddAccount() {
             </div>
 
             {/* fetching data screen */}
-            <div class="modal-pop-up-loading" style={{ display: testingLoading ? 'block' : 'none' }}>
-                <div class="modal-pop-up-loading-spiner"></div>
-                <p>fetching data...</p>
-            </div>
+            {isLoading && (
+                <div className="popup">
+                    <div className="modal-pop-up-loading">
+                        <div className="modal-pop-up-loading-spiner"></div>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

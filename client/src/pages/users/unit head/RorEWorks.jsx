@@ -600,46 +600,46 @@ function RorEWorks() {
     item.added_by.toLowerCase().includes(searchList.toLowerCase())
   );
 
-   // ###################################################################  DOWNLOAD PLAGIARISM RESULT REQUEST  #################################################################################
-   const [downloadChecker, setDownloadChecker] = useState(false);
-   const [fileUrl, setFileUrl] = useState('');
-   const [myFileName, setMyFileName] = useState('');
+  // ###################################################################  DOWNLOAD PLAGIARISM RESULT REQUEST  #################################################################################
+  const [downloadChecker, setDownloadChecker] = useState(false);
+  const [fileUrl, setFileUrl] = useState('');
+  const [myFileName, setMyFileName] = useState('');
 
-   const downloadResult = async (item) => {
+  const downloadResult = async (item) => {
 
-       const data_id = (item.id).toString();
-       const gc = (item.group_code);
-       const research = (item.research).toString();
-       setMyFileName(item.file_name);
+    const data_id = (item.id).toString();
+    const gc = (item.group_code);
+    const research = (item.research).toString();
+    setMyFileName(item.file_name);
 
-       const requestResult = { data_id, gc, research };
+    const requestResult = { data_id, gc, research };
 
-       try {
-           const response = await axios.post(`${backendUrl}/api/download/plagiarism-result`, requestResult, {
-               headers: {
-                   'Authorization': `Bearer ${token}`
-               },
-               responseType: 'blob'
-           });
-           const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
-           const url = URL.createObjectURL(blob);
-           setFileUrl(url);
-           setDownloadChecker(true);
-       } catch (error) {
-           console.error('Error generating DOCX:', error);
-       }
-   };
+    try {
+      const response = await axios.post(`${backendUrl}/api/download/plagiarism-result`, requestResult, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+        responseType: 'blob'
+      });
+      const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+      const url = URL.createObjectURL(blob);
+      setFileUrl(url);
+      setDownloadChecker(true);
+    } catch (error) {
+      console.error('Error generating DOCX:', error);
+    }
+  };
 
-   if (downloadChecker) {
-       const fileName = myFileName.split('_+_').pop();
-       const file = fileName.split('.')[0];
+  if (downloadChecker) {
+    const fileName = myFileName.split('_+_').pop();
+    const file = fileName.split('.')[0];
 
-       const a = document.createElement('a');
-       a.href = fileUrl;
-       a.download = file;
-       a.click();
-       setDownloadChecker(false);
-   }
+    const a = document.createElement('a');
+    a.href = fileUrl;
+    a.download = file;
+    a.click();
+    setDownloadChecker(false);
+  }
 
 
   return (
@@ -1116,10 +1116,14 @@ function RorEWorks() {
       </div >
 
       {/* fetching data screen */}
-      <div class="modal-pop-up-loading" style={{ display: testingLoading ? 'block' : 'none' }}>
-        <div class="modal-pop-up-loading-spiner"></div>
-        <p>fetching data...</p>
-      </div>
+      {isLoading && (
+        <div className="popup">
+          <div className="modal-pop-up-loading">
+            <div className="modal-pop-up-loading-spiner"></div>
+            <p>Loading...</p>
+          </div>
+        </div>
+      )}
 
       {/* Loading for plagiarism */}
       < div class="modal-pop-up-loading" style={{ display: scanLoading ? 'block' : 'none' }}>

@@ -16,8 +16,11 @@ function Login() {
     // check if the user is already login or not
     const token = localStorage.getItem('token');
 
+    const [isLoading, setIsLoading] = useState(false);
+
     useEffect(() => {
         async function fetchProtected() {
+            setIsLoading(true);
             try {
                 const response = await axios.get(`${backendUrl}/protected`, {
                     headers: {
@@ -29,26 +32,28 @@ function Login() {
                     console.log(response.data.user.rank);
 
                     const check = response.data.user.rank;
+                    setIsLoading(false);
 
-                    if (check === "Author"){
+                    if (check === "Author") {
                         navigate('/author-homePage');
                     }
-                    else if (check === "Chairperson"){
+                    else if (check === "Chairperson") {
                         navigate('/chairperson-homePage');
                     }
-                    else if (check === "Unit Head"){
+                    else if (check === "Unit Head") {
                         navigate('/unitHead-homePage');
                     }
-                    else if (check === "Admin"){
+                    else if (check === "Admin") {
                         navigate('/Home');
                     }
-                    else{
+                    else {
                         navigate('/');
                     }
                     // navigate('/Home');
                 }
 
             } catch (error) {
+                setIsLoading(false);
                 console.log("Error: ", error);
                 if (error.response && error.response.status === 401) {
                     console.log(error.response.data);
@@ -92,6 +97,7 @@ function Login() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const data = { email, password };
+        setIsLoading(true);
 
         try {
             const response = await axios.post(`${backendUrl}/login`, data);
@@ -99,6 +105,7 @@ function Login() {
                 const token = response.data.token;
 
                 localStorage.setItem('token', token);
+                setIsLoading(false);
 
                 setError('');
                 setPassword('');
@@ -108,19 +115,19 @@ function Login() {
                     setVisibleResponse(false);
                 }, 5000);
 
-                if (response.data.rank === "Admin"){
+                if (response.data.rank === "Admin") {
                     // admin side
                     navigate('/Home');
                 }
-                else if (response.data.rank === "Author"){
+                else if (response.data.rank === "Author") {
                     // Author side
                     navigate('/Author-homePage')
                 }
-                else if (response.data.rank === "Chairperson"){
+                else if (response.data.rank === "Chairperson") {
                     // chirperson side
                     navigate('/Chairperson-homePage');
                 }
-                else if (response.data.rank === "Unit Head"){
+                else if (response.data.rank === "Unit Head") {
                     // unit head side
                     navigate('/UnitHead-homePage');
                 }
@@ -128,6 +135,7 @@ function Login() {
             }
 
         } catch (error) {
+            setIsLoading(false);
             console.log("Login error: ", error);
             if (error.response && error.response.status === 401) {
                 setError(error.response.data.message);
@@ -161,10 +169,10 @@ function Login() {
                                 </div>
                             </div>
                             <div className="input-group mb-3">
-                                <input type={fafaEye ? 'text' : 'password'} className="form-control" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                                <input type={fafaEye ? 'text' : 'password'} className="form-control" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                                 <div className="input-group-append">
                                     <div className="input-group-text">
-                                        <span style={{ cursor: 'pointer' }} onClick={(e) => { setFaFaEye(!fafaEye); }} className={fafaEye ? 'fa fa-eye' : 'fa fa-eye-slash'}/>
+                                        <span style={{ cursor: 'pointer' }} onClick={(e) => { setFaFaEye(!fafaEye); }} className={fafaEye ? 'fa fa-eye' : 'fa fa-eye-slash'} />
                                     </div>
                                 </div>
                             </div>
@@ -227,6 +235,16 @@ function Login() {
                 </div>
 
             </div>
+
+            {/* fetching data screen */}
+            {isLoading && (
+                <div className="popup">
+                    <div className="modal-pop-up-loading">
+                        <div className="modal-pop-up-loading-spiner"></div>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

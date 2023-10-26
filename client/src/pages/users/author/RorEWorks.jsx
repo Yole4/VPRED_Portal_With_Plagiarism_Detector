@@ -442,11 +442,15 @@ function RorEWorks() {
                 <div class="modal-pop-up-loading-spiner"></div>
                 <p>fetching data...</p>
             </div>
-            {/* Loading screen */}
-            <div class="modal-pop-up-loading" style={{ display: isLoading ? 'block' : 'none' }}>
-                <div class="modal-pop-up-loading-spiner"></div>
-                <p>Loading...</p>
-            </div>
+            {/* fetching data screen */}
+            {isLoading && (
+                <div className="popup">
+                    <div className="modal-pop-up-loading">
+                        <div className="modal-pop-up-loading-spiner"></div>
+                        <p>Loading...</p>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
